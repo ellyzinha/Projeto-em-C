@@ -5,14 +5,24 @@ const int screenHeight = 800;
 
 typedef struct {
     Vector2 pos;
+    Vector2 vel;
+    Vector2 acc;
     Texture2D textura;
     Rectangle sourceRec;
     int frameAtual;
+    int altura;
+    int largura;
 }PERSONAGEM;
 
 void initPersonagem(PERSONAGEM* personagem){
     personagem->pos.x = 0;
     personagem->pos.y = 650;
+    personagem->vel.y = 0;
+    personagem->vel.x = 0;
+    personagem->acc.y = 0.5;
+    personagem->acc.x = 0;
+    personagem->altura;
+    personagem->largura;
     personagem->textura = LoadTexture("./pink_monster/monstrograndeconceito.png");
     Rectangle sr = {0, 0, personagem->textura.width/6, personagem->textura.height};
     personagem->sourceRec = sr;
@@ -30,6 +40,30 @@ void updatePersonagem(PERSONAGEM* personagem) {
             personagem->frameAtual = 0;
         }
     }
+    if (IsKeyDown(KEY_RIGHT))
+    {
+        personagem->pos.x += 2;
+    }
+    if (IsKeyDown(KEY_LEFT))
+    {
+        personagem->pos.x -= 2;
+    }
+    if (IsKeyDown(KEY_UP))
+    {
+        personagem->vel.y = -5;
+    }
+    
+    personagem->vel.x += personagem->acc.x;
+    personagem->vel.y += personagem->acc.y;
+        
+    personagem->pos.x += personagem->vel.x;
+    personagem->pos.y += personagem->vel.y;
+    
+    if(personagem->pos.x < 0) personagem->pos.x = 0;
+    if(personagem->pos.x > 1150) personagem->pos.x = 1150;
+    if(personagem->pos.y < 0) personagem->pos.y = 0;
+    if(personagem->pos.y  > 650) personagem->pos.y = 650;
+    
     
     personagem->sourceRec.x = personagem->frameAtual*personagem->textura.width/6;
 }
