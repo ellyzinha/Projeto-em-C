@@ -26,6 +26,18 @@ typedef struct {
     Texture2D textura_obs;
     int altura_obs;
     int largura_obs;
+    Vector2 pos_obs1;
+    Texture2D textura_obs1;
+    int altura_obs1;
+    int largura_obs1;
+    Vector2 pos_obs2;
+    Texture2D textura_obs2;
+    int altura_obs2;
+    int largura_obs2;
+    Vector2 pos_obs_arvore;
+    Texture2D textura_obs_arvore;
+    int altura_obs_arvore;
+    int largura_obs_arvore;
 }OBSTACULO;
 
 typedef struct {
@@ -70,10 +82,25 @@ void initBola (BOLA* bola) {
 
 void initObstaculo(OBSTACULO* obstaculo){
     obstaculo->pos_obs.x = 0;
-    obstaculo->pos_obs.y = 770;
+    obstaculo->pos_obs.y = 690;
     obstaculo->altura_obs;
     obstaculo->largura_obs;
-    obstaculo->textura_obs = LoadTexture("./obstaculos/plataforma.png");
+    obstaculo->textura_obs = LoadTexture("./obstaculos/plataforma1.png");
+    obstaculo->pos_obs1.x = 480;
+    obstaculo->pos_obs1.y = 690;
+    obstaculo->altura_obs1;
+    obstaculo->largura_obs1;
+    obstaculo->textura_obs1 = LoadTexture("./obstaculos/plataforma1.png");
+    obstaculo->pos_obs2.x = 800;
+    obstaculo->pos_obs2.y = 690;
+    obstaculo->altura_obs2;
+    obstaculo->largura_obs2;
+    obstaculo->textura_obs2 = LoadTexture("./obstaculos/plataforma1.png");
+    obstaculo->pos_obs_arvore.x = 600;
+    obstaculo->pos_obs_arvore.y = 420;
+    obstaculo->altura_obs_arvore;
+    obstaculo->largura_obs_arvore;
+    obstaculo->textura_obs_arvore = LoadTexture("./obstaculos/arvore.png");
 
 }
 
@@ -168,6 +195,9 @@ void drawPersonagem(PERSONAGEM* personagem) {
 //Função que desenha os obstaculos durante o cenário.
 void drawObstaculo(OBSTACULO* obstaculo) {
     DrawTextureV(obstaculo->textura_obs, obstaculo->pos_obs, WHITE);
+    DrawTextureV(obstaculo->textura_obs1, obstaculo->pos_obs1, WHITE);
+    DrawTextureV(obstaculo->textura_obs2, obstaculo->pos_obs2, WHITE);
+    DrawTextureV(obstaculo->textura_obs_arvore, obstaculo->pos_obs_arvore, WHITE);
 }
 
 void drawVida(VIDA* vida) {
