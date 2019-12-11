@@ -9,11 +9,13 @@ typedef struct {
     Vector2 vel;
     Vector2 acc;
     Texture2D textura;
+    Texture2D textura_left;
     Texture2D textura_idle;
     Texture2D textura_jump;
     Rectangle sourceRec;
     Rectangle sourceRec_idle;
     Rectangle sourceRec_jump;
+    Rectangle sourceRec_left;
     int frameAtual;
     int altura;
     int largura;
@@ -25,6 +27,13 @@ typedef struct {
     int altura_obs;
     int largura_obs;
 }OBSTACULO;
+
+typedef struct {
+    Vector2 pos_bola;
+    Texture2D textura_bola;
+    int altura_bola;
+    int largura_bola;
+}BOLA;
 
 typedef struct
 {
@@ -49,6 +58,14 @@ void initVida(VIDA* vida){
     vida->textura_vida1 = LoadTexture("./vida/hearts1.png");
     vida->textura_vida0 = LoadTexture("./vida/hearts0.png");
 
+}
+
+void initBola (BOLA* bola) {
+    bola->pos_bola.x = 650;
+    bola->pos_bola.y = 670;
+    bola->altura_bola;
+    bola->largura_bola;
+    bola->textura_bola = LoadTexture("./bola/bola.png");
 }
 
 void initObstaculo(OBSTACULO* obstaculo){
@@ -78,6 +95,9 @@ void initPersonagem(PERSONAGEM* personagem){
     personagem->textura_jump = LoadTexture("./pink_monster/pink_monster_jump.png");
     Rectangle sr_jump = {0.0f, 0.0f, personagem->textura_jump.width/8, personagem->textura_jump.height};
     personagem->sourceRec_jump = sr_jump;
+    personagem->textura_left = LoadTexture("./pink_monster/monstrograndeconceito1.png");
+    Rectangle sr_left = {0.0f, 0.0f, personagem->textura_left.width/6, personagem->textura_left.height};
+    personagem->sourceRec_left = sr_left;
     
     personagem->frameAtual = 0;
 }
@@ -104,7 +124,7 @@ void updatePersonagem(PERSONAGEM* personagem) {
     if (IsKeyDown(KEY_LEFT))
     {
         personagem->pos.x -= 2;
-        personagem->sourceRec.x = personagem->frameAtual*personagem->textura.width/6;
+        personagem->sourceRec_left.x = personagem->frameAtual*personagem->textura_left.width/6;
     }
     if (IsKeyPressed(KEY_UP) && personagem->pos.y == screenHeight - personagem->textura.height)
     {
@@ -129,11 +149,17 @@ void updatePersonagem(PERSONAGEM* personagem) {
 
 //Função que desenha o personagem.
 void drawPersonagem(PERSONAGEM* personagem) {
-    if(IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_LEFT)){
+    if(IsKeyDown(KEY_RIGHT))
+    {
         DrawTextureRec(personagem->textura, personagem->sourceRec, personagem->pos, WHITE);
-    }else if(IsKeyDown(KEY_UP)){
+    }else if(IsKeyDown(KEY_LEFT))
+    {
+        DrawTextureRec(personagem->textura_left, personagem->sourceRec_left, personagem->pos, WHITE);
+    }else if(IsKeyDown(KEY_UP))
+    {
         DrawTextureRec(personagem->textura_jump, personagem->sourceRec_jump, personagem->pos, WHITE);
-    }else{
+    }else
+    {
         DrawTextureRec(personagem->textura_idle, personagem->sourceRec_idle, personagem->pos, WHITE);
     }
     
@@ -146,6 +172,10 @@ void drawObstaculo(OBSTACULO* obstaculo) {
 
 void drawVida(VIDA* vida) {
     DrawTextureV(vida->textura_vida4, vida->pos_vida, WHITE);
+}
+
+void drawBola(BOLA* bola) {
+    DrawTextureV(bola->textura_bola, bola->pos_bola, WHITE);
 }
 
 int main(void){
@@ -169,6 +199,9 @@ int main(void){
     VIDA vida;
     initVida(&vida);
     
+    BOLA bola;
+    initBola(&bola);
+    
     while(!WindowShouldClose()) {
         
         scrollingBack -= 0.3f;
@@ -184,6 +217,7 @@ int main(void){
         drawPersonagem(&personagem);
         drawObstaculo(&obstaculo);
         drawVida(&vida);
+        drawBola(&bola);
         
         EndDrawing();
     }
