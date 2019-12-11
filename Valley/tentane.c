@@ -12,6 +12,7 @@ typedef struct {
     Texture2D textura_left;
     Texture2D textura_idle;
     Texture2D textura_jump;
+    Texture2D textura_background;
     Rectangle sourceRec;
     Rectangle sourceRec_idle;
     Rectangle sourceRec_jump;
@@ -19,6 +20,7 @@ typedef struct {
     int frameAtual;
     int altura;
     int largura;
+    float scrollingBack;
 }PERSONAGEM;
 
 typedef struct {
@@ -125,6 +127,8 @@ void initPersonagem(PERSONAGEM* personagem){
     personagem->textura_left = LoadTexture("./pink_monster/monstrograndeconceito1.png");
     Rectangle sr_left = {0.0f, 0.0f, personagem->textura_left.width/6, personagem->textura_left.height};
     personagem->sourceRec_left = sr_left;
+    personagem->textura_background = LoadTexture("./background/level1/forest.png");
+    personagem->scrollingBack = 0.0f;
     
     personagem->frameAtual = 0;
 }
@@ -141,17 +145,24 @@ void updatePersonagem(PERSONAGEM* personagem) {
             personagem->frameAtual = 0;
         }
     }
+    
 
     if (IsKeyDown(KEY_RIGHT))
     {
-        personagem->pos.x += 2;
+        personagem->scrollingBack -= 0.6f;
+        personagem->pos.x += 1;
         personagem->sourceRec.x = personagem->frameAtual*personagem->textura.width/6;
+        
+        if ( personagem->scrollingBack <= -(personagem->textura_background.width*2))  personagem->scrollingBack = 0;
         
     }
     if (IsKeyDown(KEY_LEFT))
     {
-        personagem->pos.x -= 2;
+         personagem->scrollingBack += 0.6f;
+        personagem->pos.x -= 1;
         personagem->sourceRec_left.x = personagem->frameAtual*personagem->textura_left.width/6;
+        
+        if ( personagem->scrollingBack <= -(personagem->textura_background.width*2))  personagem->scrollingBack = 0;
     }
     if (IsKeyPressed(KEY_UP) && personagem->pos.y == screenHeight - personagem->textura.height)
     {
@@ -176,6 +187,9 @@ void updatePersonagem(PERSONAGEM* personagem) {
 
 //Função que desenha o personagem.
 void drawPersonagem(PERSONAGEM* personagem) {
+    
+    DrawTextureEx(personagem->textura_background, (Vector2){personagem->scrollingBack, 20 }, 0.0f, 2.0f, WHITE);
+    DrawTextureEx(personagem->textura_background, (Vector2){personagem->textura_background.width*2 + personagem->scrollingBack, 20 }, 0.0f, 2.0f, WHITE);
     if(IsKeyDown(KEY_RIGHT))
     {
         DrawTextureRec(personagem->textura, personagem->sourceRec, personagem->pos, WHITE);
@@ -213,13 +227,6 @@ int main(void){
     InitWindow(screenWidth, screenHeight, "Valley");
     SetTargetFPS(60);
     
-    //Cenário
-    Texture2D background = LoadTexture("./background/level1/forest.png");
-    
-    float scrollingBack = 0.0f;
-    
-    SetTargetFPS(60);
-    
     PERSONAGEM personagem;
     initPersonagem(&personagem);
     
@@ -234,25 +241,20 @@ int main(void){
     
     while(!WindowShouldClose()) {
         
-        scrollingBack -= 0.3f;
          
-        if (scrollingBack <= -background.width*2) scrollingBack = 0;
-         
-        DrawTextureEx(background, (Vector2){ scrollingBack, 20 }, 0.0f, 2.0f, WHITE);
-        DrawTextureEx(background, (Vector2){ background.width*2 + scrollingBack, 20 }, 0.0f, 2.0f, WHITE);
+        
         BeginDrawing();
         ClearBackground(RAYWHITE);
         
         updatePersonagem(&personagem);
         drawPersonagem(&personagem);
-        drawObstaculo(&obstaculo);
+        drawObstaculo(&obstaculo); 
         drawVida(&vida);
         drawBola(&bola);
         
         EndDrawing();
     }
     
-    UnloadTexture(background);
     
     CloseWindow();
 }
