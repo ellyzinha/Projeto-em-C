@@ -23,16 +23,11 @@ typedef struct {
     float scrollingBack;
 }PERSONAGEM;
 
-//Obstáculo
-
 typedef struct {
     Vector2 pos_obs;
     Texture2D textura_obs;
     int altura_obs;
     int largura_obs;
-<<<<<<< HEAD
-    Rectangle sourceObs;
-=======
     Vector2 pos_obs1;
     Texture2D textura_obs1;
     int altura_obs1;
@@ -45,7 +40,6 @@ typedef struct {
     Texture2D textura_obs_arvore;
     int altura_obs_arvore;
     int largura_obs_arvore;
->>>>>>> 0db83444b654e2c62c213c778a1e708ef872c82f
 }OBSTACULO;
 
 typedef struct {
@@ -89,15 +83,6 @@ void initBola (BOLA* bola) {
 }
 
 void initObstaculo(OBSTACULO* obstaculo){
-<<<<<<< HEAD
-    obstaculo->pos_obs.x = 600;
-    obstaculo->pos_obs.y = 650;
-    obstaculo->altura_obs;
-    obstaculo->largura_obs;
-    obstaculo->textura_obs = LoadTexture("./obstaculos/obs.png");
-    Rectangle sr_obs = {0.0f, 0.0f, obstaculo->textura_obs.width, obstaculo->textura_obs.height};
-    obstaculo->sourceObs = sr_obs;
-=======
     obstaculo->pos_obs.x = 0;
     obstaculo->pos_obs.y = 690;
     obstaculo->altura_obs;
@@ -118,7 +103,6 @@ void initObstaculo(OBSTACULO* obstaculo){
     obstaculo->altura_obs_arvore;
     obstaculo->largura_obs_arvore;
     obstaculo->textura_obs_arvore = LoadTexture("./obstaculos/arvore.png");
->>>>>>> 0db83444b654e2c62c213c778a1e708ef872c82f
 
 }
 
@@ -270,6 +254,7 @@ int main(void){
         
         EndDrawing();
     }
+    
     
     CloseWindow();
 }
