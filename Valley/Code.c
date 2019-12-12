@@ -19,19 +19,24 @@ typedef struct {
     int largura;
 }PERSONAGEM;
 
+//Obstáculo
+
 typedef struct {
     Vector2 pos_obs;
     Texture2D textura_obs;
     int altura_obs;
     int largura_obs;
+    Rectangle sourceObs;
 }OBSTACULO;
 
 void initObstaculo(OBSTACULO* obstaculo){
     obstaculo->pos_obs.x = 600;
-    obstaculo->pos_obs.y = 600;
+    obstaculo->pos_obs.y = 650;
     obstaculo->altura_obs;
     obstaculo->largura_obs;
-    obstaculo->textura_obs = LoadTexture("./obstaculos/brown_on.png");
+    obstaculo->textura_obs = LoadTexture("./obstaculos/obs.png");
+    Rectangle sr_obs = {0.0f, 0.0f, obstaculo->textura_obs.width, obstaculo->textura_obs.height};
+    obstaculo->sourceObs = sr_obs;
 
 }
 
