@@ -1,5 +1,9 @@
 #include "raylib.h"
 
+#define PHYSAC_IMPLEMENTATION
+#define PHYSAC_NO_THREADS
+#include "physac.h"
+
 const int screenWidth = 1200;
 const int screenHeight = 800;
 
@@ -22,17 +26,6 @@ typedef struct {
     int largura;
     float scrollingBack;
 }PERSONAGEM;
-
-//Inimigo
-typedef struct {
-    Vector2 pos_ini;
-    Vector2 vel_ini;
-    Vector2 acc_ini;
-    Texture2D textura_ini;
-    Rectangle sourceRec_ini;
-    int altura_ini;
-    int largura_ini;
-}ENEMY;
 
 //Obstáculo
 
@@ -74,20 +67,6 @@ typedef struct
     int altura_vida;
     int largura_vida;
 }VIDA;
-
-void initEnemy(ENEMY* enemy) {
-    enemy->pos_ini.x = 600;
-    enemy->pos_ini.y = 600;
-    enemy->vel_ini.y = 0;
-    enemy->vel_ini.x = 0;
-    enemy->acc_ini.y = 0;
-    enemy->acc_ini.x = 0;
-    enemy->altura_ini;
-    enemy->largura_ini;
-    enemy->textura_ini = LoadTexture("./Personagens/noface.png");
-    Rectangle sr_ini = {0.0f, 0.0f, enemy->textura_ini.width, enemy->textura_ini.height};
-    enemy->sourceRec_ini = sr_ini;
-    }
 
 void initVida(VIDA* vida){
     vida->pos_vida.x = 0;
@@ -247,20 +226,6 @@ void drawObstaculo(OBSTACULO* obstaculo) {
     DrawTextureV(obstaculo->textura_obs_arvore, obstaculo->pos_obs_arvore, WHITE);
 }
 
-//Função que desenha o inimigo
-void drawEnemy(ENEMY* enemy) {
-    DrawTextureV(enemy->textura_ini, enemy->pos_ini, WHITE);
-}
-
-//Função que verifica a colisão do personagem com o inimigo
-
-Rectangle boxCollision = {0};
-bool collision = false;
-void checkColisao(PERSONAGEM* personagem, ENEMY* enemy){
-    collision = CheckCollisionRecs(personagem->sourceRec, enemy->sourceRec_ini);
-    
-}
-
 void drawVida(VIDA* vida) {
     DrawTextureV(vida->textura_vida4, vida->pos_vida, WHITE);
 }
@@ -273,6 +238,12 @@ int main(void){
     
     InitWindow(screenWidth, screenHeight, "Valley");
     SetTargetFPS(60);
+    
+    //floor
+    InitPhysics();
+    PhysicsBody floor = CreatePhysicsBodyRectangle((Vector2){screenWidth/2, screenHeight}, screenWidth, 100,10);
+    
+    floor->enabled = false;
     
     PERSONAGEM personagem;
     initPersonagem(&personagem);
@@ -298,7 +269,6 @@ int main(void){
         drawObstaculo(&obstaculo); 
         drawVida(&vida);
         drawBola(&bola);
-        checkColisao(&personagem, &enemy);
         
         EndDrawing();
     }
